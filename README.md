@@ -25,6 +25,12 @@ Desteklenen formatlar:
 
 ## Kullanım seçenekleri
 
+## Önce hangi dosyayı çalıştırmalıyım?
+- **Arayüz kullanacaksanız:** Doğrudan `app.py` çalıştırın.
+  - Komut: `streamlit run app.py`
+  - Arayüz içinden önce **İndeksi Oluştur / Güncelle**, sonra **Yanıtla**.
+- **CLI kullanacaksanız:** Önce `rag_regulations.py ingest`, sonra `rag_regulations.py ask` çalıştırın.
+
 ### A) Arayüz (önerilen)
 Streamlit arayüzünü başlatın:
 ```bash
