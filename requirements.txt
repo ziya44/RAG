@@ -2,5 +2,6 @@ faiss-cpu
 numpy
 pypdf
 sentence-transformers
-transformers
+streamlit
 torch
+transformers

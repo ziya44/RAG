@@ -23,12 +23,27 @@ Desteklenen formatlar:
 - `.md`
 - `.pdf`
 
-### 3) Vektör indeksini oluşturma
+## Kullanım seçenekleri
+
+### A) Arayüz (önerilen)
+Streamlit arayüzünü başlatın:
+```bash
+streamlit run app.py
+```
+
+Arayüzde:
+1. Sol panelden yönetmelik klasörü ve indeks klasörünü seçin.
+2. **İndeksi Oluştur / Güncelle** ile vektör indeksini oluşturun.
+3. Soru yazıp **Yanıtla** butonuna basın.
+4. Yanıtın altında kullanılan kaynak parçaları ve skorlarını görün.
+
+### B) Komut satırı (CLI)
+#### 1) Vektör indeksini oluşturma
 ```bash
 python rag_regulations.py ingest --source-dir data/regulations --index-dir data/index
 ```
 
-### 4) Soru sorma
+#### 2) Soru sorma
 ```bash
 python rag_regulations.py ask --index-dir data/index --question "Devamsızlık sınırı nedir?"
 ```

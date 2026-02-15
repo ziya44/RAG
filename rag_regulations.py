@@ -160,6 +160,32 @@ def answer_question(
     top_k: int,
     min_score: float,
 ) -> None:
+    result = answer_question_data(
+        index_dir=index_dir,
+        question=question,
+        embedding_model=embedding_model,
+        llm_model=llm_model,
+        top_k=top_k,
+        min_score=min_score,
+    )
+
+    print("\n=== CEVAP ===\n")
+    print(result["answer"])
+    print("\n=== KULLANILAN KAYNAKLAR ===")
+    for i, item in enumerate(result["sources"], start=1):
+        print(
+            f"[{i}] {item['source']} | parça={item['chunk_id']} | skor={item['score']:.3f}"
+        )
+
+
+def answer_question_data(
+    index_dir: Path,
+    question: str,
+    embedding_model: str,
+    llm_model: str,
+    top_k: int,
+    min_score: float,
+) -> dict:
     index, chunks = load_index(index_dir)
     embedder = SentenceTransformer(embedding_model)
     contexts = retrieve(
@@ -172,8 +198,10 @@ def answer_question(
     )
 
     if not contexts:
-        print("Bu sorunun cevabı yüklenen yönetmeliklerde bulunamadı.")
-        return
+        return {
+            "answer": "Bu sorunun cevabı yüklenen yönetmeliklerde bulunamadı.",
+            "sources": [],
+        }
 
     prompt = build_prompt(question, contexts)
 
@@ -190,11 +218,16 @@ def answer_question(
     output = generator(prompt)[0]["generated_text"]
     answer = output[len(prompt) :].strip()
 
-    print("\n=== CEVAP ===\n")
-    print(answer)
-    print("\n=== KULLANILAN KAYNAKLAR ===")
-    for i, (score, chunk) in enumerate(contexts, start=1):
-        print(f"[{i}] {chunk.source} | parça={chunk.chunk_id} | skor={score:.3f}")
+    sources = [
+        {
+            "source": chunk.source,
+            "chunk_id": chunk.chunk_id,
+            "score": float(score),
+            "text": chunk.text,
+        }
+        for score, chunk in contexts
+    ]
+    return {"answer": answer, "sources": sources}
 
 
 def build_parser() -> argparse.ArgumentParser:
